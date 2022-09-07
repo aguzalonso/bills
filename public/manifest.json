@@ -3,14 +3,20 @@
     "name": "Bills App",
     "icons": [
         {
-            "src": "/images/logo.jpg",
-            "type": "image/jpg",
-            "sizes": "1024x1024"
+            "src": "/images/logo.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/images/logo.png",
+            "type": "image/png",
+            "sizes": "144x144",
+            "purpose": "any"
         }
     ],
     "start_url": ".",
     "display": "standalone",
     "theme_color": "#000000",
     "background_color": "#ffffff"
-
 }

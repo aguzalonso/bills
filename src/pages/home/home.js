@@ -2,9 +2,9 @@ import React from 'react';
 import { InputAdornment, OutlinedInput, Typography, Grid, Button } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import './index.scss'
 import { useDispatch } from 'react-redux';
 import { increment } from '../../features/items/itemStore';
+import './index.scss'
 
 const validationSchema = yup.object({
     concept: yup
