@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { BottomNavigation, BottomNavigationAction, Paper, Grid, AppBar, Typography, Toolbar } from '@mui/material';
 import RestoreIcon from '@mui/icons-material/Restore';
 import PaidIcon from '@mui/icons-material/Paid';
-import { Routes, Route, Link, useLocation } from "react-router-dom";
-import Monthly from './pages/monthly';
-import Home from './pages/home/home';
 import './index.scss'
+
+const Home = lazy(() => import('./pages/home/home'));
+const TotalBills = lazy(() => import('./pages/total-bills/totalBills'))
 
 const pageTitle = {
     '/': 'Daily Bills',
-    '/bills': 'Total Bills' 
+    '/bills': 'Total Bills'
 }
 
 const App = () => {
@@ -17,7 +18,7 @@ const App = () => {
     const location = useLocation();
 
     return (
-        <>
+        <Suspense fallback={<div>Loading...</div>}>
             <Grid container justifyContent='center'>
                 <AppBar position="static" className='appBar'>
                     <Toolbar variant="dense" >
@@ -29,7 +30,7 @@ const App = () => {
                 <Grid item xs={12} md={8}>
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="bills" element={<Monthly />} />
+                        <Route path="bills" element={<TotalBills />} />
                     </Routes>
                     <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
                         <BottomNavigation
@@ -46,7 +47,7 @@ const App = () => {
                     </Paper>
                 </Grid>
             </Grid>
-        </>
+        </Suspense>
     )
 }
 
