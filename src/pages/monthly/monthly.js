@@ -36,7 +36,8 @@ const Monthly = () => {
                                     <IconButton edge="end" aria-label="delete">
                                         <AttachMoneyIcon />{item.amount}
                                     </IconButton>
-                                }>
+                                }
+                                    key={index}>
                                     <ListItemText primary={item.concept.toUpperCase()} secondary={item.date} />
                                 </ListItem>
                             ))}
