@@ -1,19 +1,33 @@
 import React from "react";
-import { Slide, Snackbar } from "@mui/material";
+import { Button, Slide, Snackbar } from "@mui/material";
+// import IconButton from "@mui/icons-material/IconButton";
+import CloseIcon from '@mui/icons-material/Close';
 
 const SnackBar = ({ open, setOpen, message }) => {
+    const handleClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setOpen(false);
+    }
+
     return (
         <Snackbar
             open={open}
-            onClose={() => setOpen(false)}
-            TransitionComponent={(props) => <Slide {...props} direction='up'/>}
+            onClose={handleClose}
+            TransitionComponent={(props) => <Slide {...props} direction='up' />}
             message={message}
             key='snackbar'
             anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'center',
             }}
-            autoHideDuration={10000}
+            autoHideDuration={2000}
+            action={[
+                <Button key="close" onClick={handleClose}>
+                    <CloseIcon />
+                </Button>
+            ]}
         />
     )
 }

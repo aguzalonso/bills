@@ -4,6 +4,10 @@ body {
     background-color: rgb(40 40 40);
 }
 
+html, body {
+    height: 100%;
+}
+
 .appBar {
     display: flex;
     align-items: center;

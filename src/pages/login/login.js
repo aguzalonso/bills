@@ -80,13 +80,12 @@ const Login = () => {
                         className='input'
                         error={formik.touched.password && Boolean(formik.errors.password)}
                         helpertext={formik.touched.password && formik.errors.password}
-                    // startAdornment={<InputAdornment position="start">$</InputAdornment>}
                     />
                 </Grid>
-                <Grid item container xs={12} direction='row' justifyContent='space-around' style={{ width: '100%', display: 'flex' }}>
+                <Grid item xs={12} direction='row' justifyContent='space-around' style={{ width: '100%', display: 'flex' }}>
                     <Button variant="contained" type='submit'>Log in</Button>
                 </Grid>
-                <Grid item container xs={12} direction='row' justifyContent='space-around' style={{ width: '100%', display: 'flex' }}>
+                <Grid item xs={12} direction='row' justifyContent='space-around' style={{ width: '100%', display: 'flex' }}>
                     <Typography className='typography'>If you don't have an account, <Link className='link' to='/register'>click here</Link></Typography>
                 </Grid>
                 <SnackBar open={open} setOpen={setOpen} message='Please check your usernname and password' />

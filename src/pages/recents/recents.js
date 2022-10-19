@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { InputAdornment, OutlinedInput, Typography, Grid, Button } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { increment } from '../../features/items/itemStore';
 import './index.scss'
+import useSaveBills from './useSaveBills';
+import SnackBar from '../../componets/snackbar';
 
 const validationSchema = yup.object({
     concept: yup
@@ -16,7 +18,9 @@ const validationSchema = yup.object({
 });
 
 const Recents = () => {
-    const dispatch = useDispatch()
+    const [open, setOpen] = useState(false)
+    const [message, setMessage] = useState('')
+    const { mutate, isSuccess, isError } = useSaveBills()
 
     const formik = useFormik({
         initialValues: {
@@ -29,10 +33,26 @@ const Recents = () => {
                 ...values,
                 date: new Date().toDateString(),
             };
-            dispatch(increment(newValues));
+
+            mutate(newValues)
+
             formik.handleReset();
         },
     });
+
+    useEffect(() => {
+        if (isError) {
+            setOpen(true)
+            setMessage('There was a error submitting your bill. Please try again later.')
+        }
+
+        if (isSuccess) {
+            setOpen(true)
+            setMessage('Bill was saved successfully!')
+        }
+
+    }, [isError, isSuccess])
+
 
     return (
         <form onSubmit={formik.handleSubmit}>
@@ -70,6 +90,7 @@ const Recents = () => {
                     <Button variant="outlined" onClick={() => formik.handleReset()}>Cancel</Button>
                     <Button variant="contained" type='submit'>Save</Button>
                 </Grid>
+                <SnackBar open={open} setOpen={setOpen} message={message} />
             </Grid>
         </form>
     )

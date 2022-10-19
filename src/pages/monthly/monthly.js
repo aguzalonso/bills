@@ -1,48 +1,56 @@
-import { Box, IconButton, List, ListItem, ListItemText, Typography } from "@mui/material";
 import React from "react";
-import { useSelector } from "react-redux";
+import { Grid, IconButton, List, ListItem, ListItemText, Typography } from "@mui/material";
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import './index.scss'
 import { isEmpty } from "lodash";
 import EmptyView from "../../componets/emptyView";
 import image from '../../assets/images/expense2.png'
+import useMonthlyBills from "./useMothlyBills";
+import Loading from "../../componets/loading";
+import './index.scss'
 
+const month = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
 
 const Monthly = () => {
-    const itemStore = useSelector(state => state.itemStore.value);
+    const { bills, isLoading } = useMonthlyBills()
+    const currentMonth = month[new Date().getMonth()]
 
     const totalAmount = () => {
         let total = 0
-        itemStore.forEach((item) => total += item.amount)
+        bills.forEach((bill) => total += bill.amount)
 
         return total
     }
 
+    if (isLoading) {
+        return <Loading />
+    }
+
     return (
         <>
-            {isEmpty(itemStore) ? (<EmptyView icon={image} text='You have no expenses yet' />) :
+            {isEmpty(bills) ? (<EmptyView icon={image} text='You have no expenses yet' />) :
                 (
-                    <>
-                        <Box className='amount-container'>
-                            <Typography variant="h3" style={{ color: '#f1f3f9' }}>TOTAL: ${totalAmount()}</Typography>
-                        </Box>
-                        <List sx={{
-                            width: '100%',
-                            overflow: 'auto',
-                            maxHeight: '50vh'
-                        }}>
-                            {itemStore?.map((item, index) => (
-                                <ListItem className="list-item" secondaryAction={
-                                    <IconButton edge="end" aria-label="delete">
-                                        <AttachMoneyIcon />{item.amount}
-                                    </IconButton>
-                                }
-                                    key={index}>
-                                    <ListItemText primary={item.concept.toUpperCase()} secondary={item.date} />
-                                </ListItem>
-                            ))}
-                        </List>
-                    </>
+                    <Grid container>
+                        <Grid xs={12} className='amount-container'>
+                            <Typography variant="h4" style={{ color: '#f1f3f9' }}>{currentMonth} TOTAL: ${totalAmount()}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <List className="list-container">
+                                {bills?.map((bill, index) => (
+                                    <ListItem
+                                        className="list-item"
+                                        secondaryAction={
+                                            <IconButton edge="end" aria-label="delete">
+                                                <AttachMoneyIcon />{bill.amount}
+                                            </IconButton>
+                                        }
+                                        key={index}
+                                    >
+                                        <ListItemText primary={bill.concept.toUpperCase()} secondary={bill.date} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Grid>
+                    </Grid>
                 )}
         </>
     )
