@@ -116,7 +116,7 @@ const Register = () => {
                     // startAdornment={<InputAdornment position="start">$</InputAdornment>}
                     />
                 </Grid>
-                <Grid item container xs={12} direction='row' justifyContent='space-around' style={{ width: '100%', display: 'flex' }}>
+                <Grid item xs={12} direction='row' justifyContent='space-around' style={{ width: '100%', display: 'flex' }}>
                     <Button variant="outlined" onClick={() => navigate('/login')}>Go to login</Button>
                     <Button variant="contained" type='submit'>Register</Button>
                 </Grid>

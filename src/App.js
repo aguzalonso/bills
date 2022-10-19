@@ -6,6 +6,8 @@ import PaidIcon from '@mui/icons-material/Paid';
 
 import './index.scss'
 import { AccountCircle } from '@mui/icons-material';
+import Loading from './componets/loading';
+import SnackBar from './componets/snackbar';
 
 const Recents = lazy(() => import('./pages/recents/recents'));
 const TotalBills = lazy(() => import('./pages/total-bills/totalBills'))
@@ -21,6 +23,8 @@ const pageTitle = {
 
 const App = () => {
     const [value, setValue] = useState(0);
+    const [open, setOpen] = useState(false)
+    const [message, setMessage] = useState('')
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const location = useLocation();
@@ -55,8 +59,28 @@ const App = () => {
         navigate('/login')
     };
 
+    const deleteBills = async () => {
+        const response = await fetch('http://localhost:4000/deleteBills', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+
+        const data = await response.json()
+
+        if (data.status === 'ok') {
+            setOpen(true)
+            setMessage('Bills were deleted successfully!')
+        } else {
+            setOpen(true)
+            setMessage('Something went wrong!')
+        }
+    }
+
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loading />}>
             <Grid container justifyContent='center'>
                 <AppBar position="static">
                     <Toolbar variant="dense">
@@ -91,6 +115,7 @@ const App = () => {
                                     onClose={handleClose}
                                 >
                                     <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+                                    <MenuItem onClick={deleteBills}>Delete All Bills</MenuItem>
                                 </Menu>
                             </div>
                         }
@@ -113,13 +138,14 @@ const App = () => {
                                 }}
                             >
                                 <BottomNavigationAction component={Link} to="/" label="Recents" icon={<RestoreIcon />} />
-                                <BottomNavigationAction component={Link} to="bills" label="Total" icon={<PaidIcon />} />
+                                <BottomNavigationAction component={Link} to="/bills" label="Total" icon={<PaidIcon />} />
                             </BottomNavigation>
                         </Paper>
                     ) : (
                         null
                     )}
                 </Grid>
+                <SnackBar open={open} setOpen={setOpen} message={message} />
             </Grid>
         </Suspense >
     )
